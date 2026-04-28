@@ -1,6 +1,8 @@
 import React, { Suspense } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import "./App.css";
+import ErrorBoundary from "./ErrorBoundary";
+import Skeleton from "./Skeleton";
 
 const Home = React.lazy(() => import("homeApp/App"));
 const Product = React.lazy(() => import("productApp/App"));
@@ -38,14 +40,39 @@ function App() {
         </NavLink>
       </nav>
 
-      <Suspense fallback={<p className="shell-loading">Loading remote app...</p>}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Product />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="*" element={<p className="shell-loading">Page not found</p>} />
-        </Routes>
-      </Suspense>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ErrorBoundary>
+              <Suspense fallback={<Skeleton />}>
+                <Home />
+              </Suspense>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <ErrorBoundary>
+              <Suspense fallback={<Skeleton />}>
+                <Product />
+              </Suspense>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ErrorBoundary>
+              <Suspense fallback={<Skeleton />}>
+                <Cart />
+              </Suspense>
+            </ErrorBoundary>
+          }
+        />
+        <Route path="*" element={<p className="shell-loading">Page not found</p>} />
+      </Routes>
     </div>
   );
 }
