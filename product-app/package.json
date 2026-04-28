@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node ../scripts/fix-remote-entry.cjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@originjs/vite-plugin-federation": "^1.4.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
