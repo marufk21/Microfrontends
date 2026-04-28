@@ -1,44 +1,52 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useStore } from "zustand";
 import "./App.css";
 import { cartStore } from "../../../shared/cartStore";
 
 const App = () => {
   const items = useStore(cartStore, (state) => state.items);
-
-  useEffect(() => {
-    const handleAddToCart = () => {
-      console.log("ADD_TO_CART event received");
-    };
-
-    window.addEventListener("ADD_TO_CART", handleAddToCart);
-
-    return () => {
-      window.removeEventListener("ADD_TO_CART", handleAddToCart);
-    };
-  }, []);
+  const incrementItem = useStore(cartStore, (state) => state.incrementItem);
+  const decrementItem = useStore(cartStore, (state) => state.decrementItem);
 
   const total = useMemo(
-    () => items.reduce((sum, item) => sum + item.price, 0),
+    () => items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [items],
+  );
+  const totalItems = useMemo(
+    () => items.reduce((sum, item) => sum + item.quantity, 0),
     [items],
   );
 
   return (
     <section className="cart-app">
-      <h1>Cart App</h1>
+      <div className="cart-header">
+        <h1>Your Cart</h1>
+        <span>{totalItems} items</span>
+      </div>
       {items.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p className="cart-empty">Your cart is empty. Add products to begin.</p>
       ) : (
         <>
           <ul className="cart-list">
-            {items.map((item, index) => (
-              <li key={`${item.name}-${index}`}>
-                <span>{item.name}</span>
-                <strong>Rs. {item.price}</strong>
+            {items.map((item) => (
+              <li key={item.name}>
+                <div>
+                  <span>{item.name}</span>
+                  <p>Rs. {(item.price * item.quantity).toLocaleString()}</p>
+                </div>
+                <div className="qty-controls">
+                  <button type="button" onClick={() => decrementItem(item.name)}>
+                    -
+                  </button>
+                  <strong>{item.quantity}</strong>
+                  <button type="button" onClick={() => incrementItem(item.name)}>
+                    +
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
-          <p className="cart-total">Total: Rs. {total}</p>
+          <p className="cart-total">Total: Rs. {total.toLocaleString()}</p>
         </>
       )}
     </section>

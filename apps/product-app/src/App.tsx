@@ -1,21 +1,24 @@
 import "./App.css";
-import { cartStore, type CartItem } from "../../../shared/cartStore";
-
-const products: CartItem[] = [
-  { name: "Wireless Mouse", price: 899 },
-  { name: "Mechanical Keyboard", price: 2499 },
-  { name: "USB-C Cable", price: 399 },
-  { name: "Laptop Stand", price: 1299 },
-  { name: "Desk Lamp", price: 1599 },
-  { name: "Noise Cancelling Headphones", price: 4999 },
-];
+import { useState } from "react";
+import { useStore } from "zustand";
+import { cartStore, type Product } from "../../../shared/cartStore";
+import { products } from "../../../shared/products";
 
 function App() {
-  const addToCart = (product: CartItem) => {
+  const items = useStore(cartStore, (state) => state.items);
+  const incrementItem = useStore(cartStore, (state) => state.incrementItem);
+  const decrementItem = useStore(cartStore, (state) => state.decrementItem);
+  const [recentlyAdded, setRecentlyAdded] = useState<Record<string, boolean>>({});
+
+  const addToCart = (product: Product) => {
     cartStore.getState().addItem(product);
+    setRecentlyAdded((state) => ({ ...state, [product.name]: true }));
+    setTimeout(() => {
+      setRecentlyAdded((state) => ({ ...state, [product.name]: false }));
+    }, 1000);
 
     window.dispatchEvent(
-      new CustomEvent<CartItem>("ADD_TO_CART", {
+      new CustomEvent<Product>("ADD_TO_CART", {
         detail: product,
       }),
     );
@@ -23,19 +26,53 @@ function App() {
 
   return (
     <section className="product-app">
-      <h1>Product App</h1>
+      <div className="product-header">
+        <h1>Products</h1>
+        <span>{products.length} available</span>
+      </div>
       <div className="product-list">
-        {products.map((product) => (
-          <div className="product-card" key={product.name}>
-            <div>
-              <h2>{product.name}</h2>
-              <p>Rs. {product.price}</p>
-            </div>
-            <button type="button" onClick={() => addToCart(product)}>
-              Add to Cart
-            </button>
-          </div>
-        ))}
+        {products.map((product) => {
+          const currentItem = items.find((item) => item.name === product.name);
+          const currentQuantity = currentItem?.quantity ?? 0;
+
+          return (
+            <article className="product-card" key={product.name}>
+              <div>
+                <h2>{product.name}</h2>
+                <p>Rs. {product.price}</p>
+              </div>
+              <div className="product-actions">
+                <button
+                  type="button"
+                  className="qty-btn"
+                  onClick={() => decrementItem(product.name)}
+                  disabled={!currentItem}
+                >
+                  -
+                </button>
+                <button
+                  type="button"
+                  className={`add-btn ${recentlyAdded[product.name] ? "added" : ""}`}
+                  onClick={() => addToCart(product)}
+                >
+                  {recentlyAdded[product.name]
+                    ? "Added to Cart"
+                    : currentQuantity > 0
+                      ? `Add to Cart (${currentQuantity})`
+                      : "Add to Cart"}
+                </button>
+                <button
+                  type="button"
+                  className="qty-btn"
+                  onClick={() => incrementItem(product.name)}
+                  disabled={!currentItem}
+                >
+                  +
+                </button>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

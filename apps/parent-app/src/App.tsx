@@ -1,76 +1,49 @@
 import React, { Suspense } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
+import "./App.css";
 
 const Home = React.lazy(() => import("homeApp/App"));
 const Product = React.lazy(() => import("productApp/App"));
 const Cart = React.lazy(() => import("cartApp/App"));
 
-function ProductCartPage() {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 2fr) minmax(280px, 1fr)",
-        gap: 16,
-        alignItems: "start",
-      }}
-    >
-      <Product />
-      <Cart />
-    </div>
-  );
-}
-
 function App() {
   return (
-    <div style={{ padding: "20px" }}>
-      <nav
-        style={{
-          display: "flex",
-          gap: 12,
-          marginBottom: 16,
-          padding: 12,
-          border: "1px solid #e5e7eb",
-          borderRadius: 10,
-        }}
-      >
+    <div className="shell">
+      <header className="shell-header">
+        <div>
+          <p className="shell-kicker">Microfrontends Demo</p>
+          <h1>Minimal Commerce Suite</h1>
+        </div>
+      </header>
+
+      <nav className="shell-nav">
         <NavLink
           to="/"
           end
-          style={({ isActive }) => ({
-            fontWeight: isActive ? 700 : 400,
-            textDecoration: "none",
-          })}
+          className={({ isActive }) => `shell-link ${isActive ? "active" : ""}`}
         >
           Home
         </NavLink>
         <NavLink
           to="/products"
-          style={({ isActive }) => ({
-            fontWeight: isActive ? 700 : 400,
-            textDecoration: "none",
-          })}
+          className={({ isActive }) => `shell-link ${isActive ? "active" : ""}`}
         >
           Products
         </NavLink>
         <NavLink
           to="/cart"
-          style={({ isActive }) => ({
-            fontWeight: isActive ? 700 : 400,
-            textDecoration: "none",
-          })}
+          className={({ isActive }) => `shell-link ${isActive ? "active" : ""}`}
         >
           Cart
         </NavLink>
-    
       </nav>
 
-      <Suspense fallback={<p>Loading remote app...</p>}>
+      <Suspense fallback={<p className="shell-loading">Loading remote app...</p>}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/products" element={<ProductCartPage />} />
+          <Route path="/products" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="*" element={<p>Not found</p>} />
+          <Route path="*" element={<p className="shell-loading">Page not found</p>} />
         </Routes>
       </Suspense>
     </div>
