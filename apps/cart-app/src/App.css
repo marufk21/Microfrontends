@@ -1,0 +1,23 @@
+.cart-app {
+  padding: 20px;
+  border: 2px solid blue;
+}
+
+.cart-list {
+  display: grid;
+  gap: 8px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.cart-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.cart-total {
+  font-weight: 700;
+}

@@ -1,0 +1,27 @@
+{
+  "name": "microfrontends",
+  "private": true,
+  "workspaces": [
+    "apps/parent-app",
+    "apps/product-app",
+    "apps/cart-app",
+    "apps/home-app"
+  ],
+  "scripts": {
+    "dev": "npm run dev:all",
+    "dev:parent": "npm run dev --workspace apps/parent-app",
+    "dev:product": "npm run dev --workspace apps/product-app",
+    "dev:cart": "npm run dev --workspace apps/cart-app",
+    "dev:home": "npm run dev --workspace apps/home-app",
+    "dev:all": "concurrently -n parent,product,cart,home -c cyan,magenta,green,yellow \"npm run dev:parent\" \"npm run dev:product\" \"npm run dev:cart\" \"npm run dev:home\"",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "preview:parent": "npm run preview --workspace apps/parent-app",
+    "preview:product": "npm run preview --workspace apps/product-app",
+    "preview:cart": "npm run preview --workspace apps/cart-app",
+    "preview:home": "npm run preview --workspace apps/home-app"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

@@ -5,6 +5,22 @@ const Home = React.lazy(() => import("homeApp/App"));
 const Product = React.lazy(() => import("productApp/App"));
 const Cart = React.lazy(() => import("cartApp/App"));
 
+function ProductCartPage() {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 2fr) minmax(280px, 1fr)",
+        gap: 16,
+        alignItems: "start",
+      }}
+    >
+      <Product />
+      <Cart />
+    </div>
+  );
+}
+
 function App() {
   return (
     <div style={{ padding: "20px" }}>
@@ -52,7 +68,7 @@ function App() {
       <Suspense fallback={<p>Loading remote app...</p>}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Product />} />
+          <Route path="/products" element={<ProductCartPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<p>Not found</p>} />
         </Routes>
