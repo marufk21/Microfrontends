@@ -8,9 +8,9 @@ export default defineConfig({
     federation({
       name: "parentApp",
       remotes: {
-        homeApp: "http://localhost:5173/assets/remoteEntry.js",
-        productApp: "http://localhost:5174/assets/remoteEntry.js",
-        cartApp: "http://localhost:5175/assets/remoteEntry.js",
+        homeApp: "http://localhost:5173/remoteEntry.js",
+        productApp: "http://localhost:5174/remoteEntry.js",
+        cartApp: "http://localhost:5175/remoteEntry.js",
       },
       shared: ["react", "react-dom"],
     }),

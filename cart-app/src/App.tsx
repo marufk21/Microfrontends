@@ -1,8 +1,6 @@
-import "./App.css";
-
 const App = () => {
   return (
-    <div className="cart-card">
+    <div style={{ padding: 20, border: "2px solid blue" }}>
       <h1>Cart App</h1>
       <p>This is Cart Microfrontend</p>
     </div>

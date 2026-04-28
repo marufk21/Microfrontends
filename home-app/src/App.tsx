@@ -1,8 +1,6 @@
-import "./App.css";
-
 const App = () => {
   return (
-    <div className="home-card">
+    <div style={{ padding: 20, border: "2px solid red" }}>
       <h1>Home App</h1>
       <p>This is Home Microfrontend</p>
     </div>

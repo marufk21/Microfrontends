@@ -1,11 +1,8 @@
 import React, { Suspense } from "react";
-import { Link, NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Route, Routes } from "react-router-dom";
 
-// @ts-ignore
 const Home = React.lazy(() => import("homeApp/App"));
-// @ts-ignore
 const Product = React.lazy(() => import("productApp/App"));
-// @ts-ignore
 const Cart = React.lazy(() => import("cartApp/App"));
 
 function App() {
@@ -52,7 +49,7 @@ function App() {
     
       </nav>
 
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<p>Loading remote app...</p>}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Product />} />
